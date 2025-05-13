@@ -1,5 +1,13 @@
 import {extractArg} from "./utils/utils.js";
-import {list, find, more} from "./controller/studentController.js"
+import {list, find, more, addNote, saveFile} from "./controller/studentController.js"
+import readline from "node:readline";
+import dotenv from "dotenv"
+
+dotenv.config(/*{
+// 	path: "costume/path/to/.env"//pour préciser le chemin vers le fichier .env
+ }*/)
+
+console.log(process.env)
 
 const commands = [
 	{
@@ -13,33 +21,59 @@ const commands = [
 	{
 		name: 'more <number>',
 		description: "Filtre les élèves en fonction de leur moyenne"
+	},
+	{
+		name: "addNote",
+		description: "Ajoute une note à un élève spécifique"
 	}
 ]
 
-process.stdin.on("data", (chunk) => {
-	const data = chunk.toString()
-	const text = data.replace("\r\n", '')
+const rl = readline.createInterface({
+	input: process.stdin,
+	output: process.stdout
+})
+
+rl.setPrompt("STUDENT > ")
+rl.prompt()
+rl.on("line", (line) => {
 	let arg;
 	
-	switch (text) {
+	switch (line) {
 		
 		case 'list':
 			list()
-			return
+			break
 		
-		case text.match(/^find /) ? text : null :
-			arg = extractArg(text)
+		case line.match(/^find /) ? line : null :
+			arg = extractArg(line)
 			find(arg)
-			return
+			break
 		
-		case text.match(/^more /) ? text : null:
-			arg = extractArg(text)
+		case line.match(/^more /) ? line : null:
+			arg = extractArg(line)
 			more(arg)
-			return
+			break
 		
+		case "addNote":
+			rl.question("A qui souhaitez vous ajouter une note ?", (studentName) => {
+				rl.question("Quelle est la note à ajouter ?", (note) => {
+					addNote(studentName, note);
+					rl.prompt()
+				})
+			})
+			break;
+		case "quit":
+			rl.close()
+			break;
 		default:
 			console.group('Commande inconnu, voici la liste des commandes')
 			console.table(commands)
 			console.groupEnd()
+			break
 	}
+	rl.prompt()
+})
+rl.on("close", () => {
+	saveFile()
+	process.exit(0)
 })
