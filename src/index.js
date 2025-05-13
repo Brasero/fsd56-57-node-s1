@@ -1,13 +1,7 @@
 import {extractArg} from "./utils/utils.js";
-import {list, find, more, addNote, saveFile} from "./controller/studentController.js"
+import {list, find, more, addNote, saveFile, addMention} from "./controller/studentController.js"
 import readline from "node:readline";
-import dotenv from "dotenv"
 
-dotenv.config(/*{
-// 	path: "costume/path/to/.env"//pour préciser le chemin vers le fichier .env
- }*/)
-
-console.log(process.env)
 
 const commands = [
 	{
@@ -25,6 +19,10 @@ const commands = [
 	{
 		name: "addNote",
 		description: "Ajoute une note à un élève spécifique"
+	},
+	{
+		name: "mention <name>",
+		description: "Ajoute une mention à un élève spécifique"
 	}
 ]
 
@@ -62,8 +60,16 @@ rl.on("line", (line) => {
 				})
 			})
 			break;
+			
+		case line.match(/^mention /) ? line : null :
+			arg = extractArg(line)
+			addMention(arg)
+			break;
 		case "quit":
-			rl.close()
+			saveFile().then(() => {
+				rl.close()
+			})
+			
 			break;
 		default:
 			console.group('Commande inconnu, voici la liste des commandes')
@@ -74,6 +80,5 @@ rl.on("line", (line) => {
 	rl.prompt()
 })
 rl.on("close", () => {
-	saveFile()
 	process.exit(0)
 })

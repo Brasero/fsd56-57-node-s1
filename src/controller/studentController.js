@@ -1,13 +1,20 @@
 import fs from "node:fs";
 import path from "node:path"
+import {writeFile} from "node:fs/promises"
+import dotenv from "dotenv"
 
-console.log(process.cwd())
+dotenv.config(/*{
+// 	path: "costume/path/to/.env"//pour préciser le chemin vers le fichier .env
+ }*/)
+
 const cwd = process.cwd()
 
 const dataPath = path.join(cwd, "data", "student.json")
+const savePath = path.join(cwd, "data", "test.json")
 
 const students = JSON.parse(fs.readFileSync(dataPath, {encoding: 'utf8'}))
 
+const {APP_P, APP_B, APP_AB, APP_TB} = process.env
 
 export const list = () => {
 	const names = students.map(student => student.name)
@@ -49,7 +56,35 @@ export const addNote = (name, note) => {
 	console.log(`La note de ${sanitizeNote} à bien été attribuer à ${name}`)
 }
 
-export const saveFile = () => {
-	fs.writeFileSync(dataPath, JSON.stringify(students, null, 2))
-	console.log("Fichier sauvegardé")
+export const addMention = (name) => {
+	const student = students.find((s) => s.name.toLowerCase() === name.toLowerCase().trim())
+	
+	if (!student) {
+		console.log("Cette élève n'existe pas")
+		return
+	}
+	
+	const avg = student.notes.reduce((acc, curr) => acc + curr) / student.notes.length
+	let mention;
+	if (avg <= 10) {
+		mention = null
+	} else if (avg > 10 && avg <= 12) {
+		mention = APP_P
+	} else if (avg > 12 && avg <= 14) {
+		mention = APP_B
+	} else if (avg > 14 && avg <= 16) {
+		mention = APP_AB
+	} else {
+		mention = APP_TB
+	}
+	
+	student.mention = mention
+	console.log(`Mention ${mention} ajouté pour l'élève ${student.name}`)
+}
+
+export const saveFile = async () => {
+	
+	const data = JSON.stringify(students.map((s) => s), null, 2)
+	await writeFile(dataPath, data)
+	console.log("Fichier enregistré")
 }
