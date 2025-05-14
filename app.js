@@ -1,7 +1,34 @@
 import http from "node:http";
+import {shuffle} from "./utils/shuffle.js";
+import dotenv from "dotenv"
+import path from 'node:path'
+import fs from "node:fs"
+
+dotenv.config()
+
+const dirname = import.meta.dirname // __dirname
+//const filename = import.meta.filename // __filename
+const viewPath = path.join(dirname, "view")
+const headerPath = path.join(viewPath, "__header.html")
+const footerPath = path.join(viewPath, "__footer.html")
+
+
+const {HOST, PORT} = process.env;
+
+const users = [
+	'Alan',
+	'Sophie',
+	'Bernard',
+	'Elie'
+];
+
+let customUsers = [...users]
 
 const server = http.createServer((req, res) => {
 	const url = req.url.replace("/", "")
+	
+	const header = fs.readFileSync(headerPath, {encoding: "utf8"})
+	const footer = fs.readFileSync(footerPath, {encoding: 'utf8'})
 	
 	if (url === "favicon.ico") {
 		res.writeHead(200, {
@@ -11,39 +38,31 @@ const server = http.createServer((req, res) => {
 		return;
 	}
 	
-	if (url === "toto") {
-		res.writeHead(200, {
-			"Content-type": "text/plain"
+	if (url === "shuffle") {
+		customUsers = shuffle(customUsers)
+		console.log(customUsers)
+		res.writeHead(302, {
+			"Location": "/"
 		})
-		res.end("Bonjour toto")
+		res.end()
 		return
 	}
 	
-	if (url === "html") {
-		res.writeHead(200, {
-			"Content-type": "text/html"
-		})
-		
-		res.end(`
-			<!DOCTYPE html>
-			<html lang="fr">
-				<head>
-				 <title>Mon html</title>
-				</head>
-				<body>
-					<div>Hello Node</div>
-				</body>
-			</html>
-		`)
-		return
-	}
 	
 	res.writeHead(200, {
-		"Content-type": "text/plain"
+		'Content-type': "text/html; charset=utf8"
 	})
-	res.end("Hello world !")
+	res.end(`
+		${header}
+<h1>Liste des utilisateurs</h1>
+<ul>
+${customUsers.map((u) => (`<li>${u}</li>`)).join("")}
+</ul>
+<a href="/shuffle">Mélanger</a>
+${footer}
+	`)
 })
 
-server.listen(8000, "localhost", () => {
-	console.log(`Server running on http://localhost:8000`)
+server.listen(PORT, HOST, () => {
+	console.log(`Server running on http://${HOST}:${PORT}`)
 })
