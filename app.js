@@ -3,6 +3,7 @@ import {shuffle} from "./utils/shuffle.js";
 import dotenv from "dotenv"
 import path from 'node:path'
 import fs from "node:fs"
+import querystring from "node:querystring";
 
 dotenv.config()
 
@@ -37,7 +38,6 @@ const server = http.createServer((req, res) => {
 		res.end()
 		return;
 	}
-	
 	if (url === "shuffle") {
 		customUsers = shuffle(customUsers)
 		console.log(customUsers)
@@ -45,6 +45,48 @@ const server = http.createServer((req, res) => {
 			"Location": "/"
 		})
 		res.end()
+		return
+	}
+	
+	if (url === 'add' && req.method === "GET") {
+		const page = fs.readFileSync(path.join(viewPath, "form.html"), {encoding: "utf8"})
+		res.writeHead(200, {
+			'Content-type': "text/html"
+		})
+		res.end(page)
+		return
+	}
+	
+	if (url === "add" && req.method === "POST") {
+		let body = "";
+		req.on('data', (chunk) => {
+			body += chunk.toString()
+		})
+		req.on("end", () => {
+			// const dataArray = body.split("&")
+			// let obj = {};
+			// dataArray.forEach((data) => {
+			// 	const [key, value] = data.split("=")
+			// 	obj[key] = value
+			// })
+			// console.log(obj)
+			
+			// querystring.parse() va remplacer le code situé ci dessus
+			const data = querystring.parse(body)
+			
+			if (!data.name || data.name.trim() === "") {
+				res.writeHead(401, {"Content-type" : "text/plain"})
+				res.end("Le champs nom ne peut pas être vide")
+				return
+			}
+			
+			customUsers.push(data.name)
+			res.writeHead(301, {
+				"Location": "/"
+			})
+			res.end()
+			return
+		})
 		return
 	}
 	
