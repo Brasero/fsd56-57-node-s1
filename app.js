@@ -1,60 +1,49 @@
-import readline from "node:readline";
-import Chifoumi from "./utils/Chifoumi.js";
-import dotenv from "dotenv"
+import http from "node:http";
 
-
-dotenv.config()
-
-const {APP_SHEET, APP_ROCK, APP_SCISSORS} = process.env
-
-const rl = readline.createInterface({
-	input: process.stdin,
-	output: process.stdout
-})
-
-const game = new Chifoumi(APP_ROCK, APP_SHEET, APP_SCISSORS);
-
-const commands = {
-	start: {
-		name: "start <number>",
-		description: "Lance une partie de <number> manches"
-	},
-	stats: {
-		name: "stats",
-		description: "Affiche les statistique de la dernière partie jouée"
-	},
-	reset: {
-		name: "reset",
-		description: "Reinitialise les statistique de partie"
-	}
-}
-
-rl.setPrompt("CHIFOUMI >>")
-rl.prompt()
-
-rl.on("line", (line) => {
-	switch(line) {
-		
-		case line.match(/^start /) ? line : null :
-			game.run(line.split(" ")[1])
-			break;
-			
-		case "stats":
-			game.displayStats()
-			break;
-			
-		case "reset":
-			game.resetStats()
-			break;
-			
-		default:
-			console.log("Commande inconnue\n")
-			console.group("Commande disponible : ")
-			console.table(commands)
+const server = http.createServer((req, res) => {
+	const url = req.url.replace("/", "")
+	
+	if (url === "favicon.ico") {
+		res.writeHead(200, {
+			"Content-type": "image/x-icon"
+		})
+		res.end()
+		return;
 	}
 	
-	rl.prompt()
-}).on("end", () => {
-	console.log("Au revoir")
-	process.exit(0)
+	if (url === "toto") {
+		res.writeHead(200, {
+			"Content-type": "text/plain"
+		})
+		res.end("Bonjour toto")
+		return
+	}
+	
+	if (url === "html") {
+		res.writeHead(200, {
+			"Content-type": "text/html"
+		})
+		
+		res.end(`
+			<!DOCTYPE html>
+			<html lang="fr">
+				<head>
+				 <title>Mon html</title>
+				</head>
+				<body>
+					<div>Hello Node</div>
+				</body>
+			</html>
+		`)
+		return
+	}
+	
+	res.writeHead(200, {
+		"Content-type": "text/plain"
+	})
+	res.end("Hello world !")
+})
+
+server.listen(8000, "localhost", () => {
+	console.log(`Server running on http://localhost:8000`)
 })
