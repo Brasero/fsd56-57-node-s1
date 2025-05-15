@@ -1,51 +1,6 @@
-mixin menuItem(url, content)
-    li&attributes(attributes)
-        a(href=url)= content
+mixin navItem(path, title)
+    li: a(href=path)= title
 
 nav: ul
-        li: a(href="/" class="active") HOME
-        li: a.toto#link(href="/portfolio") Portfolio
-        li: a(href="/toto") Toto
-
-main#container
-    article.content: div.wrapper
-        // la notation p. permet d'écrire du contenu sur plusieurs ligne (PS attention à l'indentation)
-        p.
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-            Accusamus consequatur culpa deserunt dolorem dolores doloribus eaque enim
-            et exercitationem incidunt ipsa <strong>iste iusto</strong> libero maxime molestiae mollitia,
-            nam natus nostrum obcaecati possimus provident quo quod ratione rem repellat
-            repudiandae similique tempore tenetur ut vitae! Dolorem ea facilis inventore
-            molestiae officia.
-        span Coucou
-
-        // Ce commentaire sera visible sur le fichier html une fois compilé
-        //- Ce commentaire ne sera pas visible
-
-    h1 Hello #{name}
-    p Your age is #{age}
-    p.age(style="color: orange;")= age
-    p!= html
-    p mon html !{html}
-
-    - const toto = "coucou"
-    h1= toto
-    - const numbers = [1, 2, 3]
-    each number, index in numbers
-      div Le nombre #{number} est à l'index #{index}
-
-    - let i = 0
-    while i <= 10
-        div= i
-        - i++
-
-    +menuItem("/", "Home")(id="test" class="first")
-    +menuItem("/page", "page")
-
-    case color
-        when "red"
-            span Couleur choisie : rouge
-        when "green"
-            span Couleur choisie : vert
-        default
-            span Aucune couleur connue n'a été spécifié
+    +navItem("/", "Home")
+    +navItem("/user", "User")
