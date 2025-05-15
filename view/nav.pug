@@ -1,6 +1,3 @@
-mixin navItem(path, title)
-    li: a(href=path)= title
-
 nav: ul
-    +navItem("/", "Home")
-    +navItem("/user", "User")
+    each menuItem in menuItems
+      li(class=menuItem.isActive ? "nav-active": ""): a(href=menuItem.path)= menuItem.title

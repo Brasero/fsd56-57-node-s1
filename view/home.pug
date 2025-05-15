@@ -1,10 +1,15 @@
 extends ./layout/layout
 
-block stylesheet
-    link(rel="stylesheet" href="/style/home.css")
-
 block content
-    p.
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. At beatae facilis nisi placeat quas repellendus,
-        voluptatem! A, adipisci aperiam, aspernatur at, commodi delectus doloremque eaque enim id ipsa itaque maiores omnis placeat praesentium
-        unde velit veritatis voluptas. Ad aliasautem deleniti deserunt, eligendi eos nobis nostrum perspiciatis praesentium suscipit temporibus.
+    div.container
+        h1 Jean DUPONT
+        p Bienvenue sur mon portfolio
+        p Contactez-moi à l'adresse email suivante :
+        output#generate-email
+
+block script
+    script.
+        (function preventSpam() {
+            const b64encodedEmail = 'amVhbi5kdXBvbnRAZ21haWwuY29t';
+            document.getElementById('generate-email').textContent = atob(b64encodedEmail);
+        })();
