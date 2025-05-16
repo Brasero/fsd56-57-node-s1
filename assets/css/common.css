@@ -1,0 +1,16 @@
+html, body {
+ padding: 0;
+ margin: 0;
+ box-sizing: border-box;
+
+ main {
+  padding: 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  justify-content: flex-start;
+  align-items: center;
+  background: whitesmoke;
+  height: 100vh;
+ }
+}

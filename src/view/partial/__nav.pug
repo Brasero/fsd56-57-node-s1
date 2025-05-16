@@ -1,0 +1,5 @@
+mixin navItem(title, path)
+    li: a(href=path)= title
+nav: ul
+    +navItem("Home", "/")
+    +navItem("Users", "/users")

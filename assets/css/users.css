@@ -1,0 +1,37 @@
+.list {
+ list-style: none;
+ display: flex;
+ flex-direction: column;
+ gap: 16px;
+ background: white;
+ box-shadow: 1px 1px 5px rgba(0,0,0,.3);
+ padding: 32px;
+ border-radius: 8px;
+
+ li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 200px;
+  justify-content: space-between;
+
+  .buttons {
+   display: flex;
+   gap: 4px;
+
+   a {
+    padding: 4px 8px;
+    color: whitesmoke;
+    text-decoration: none;
+    border-radius: 8px;
+
+    &:first-of-type {
+     background: darkred;
+    }
+    &:last-of-type {
+     background: deepskyblue;
+    }
+   }
+  }
+ }
+}

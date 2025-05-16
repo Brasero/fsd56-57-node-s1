@@ -1,0 +1,12 @@
+extends ../layout/layout
+
+block stylesheet
+    link(rel="stylesheet" href="/styles/users.css")
+
+block content
+    ul.list
+        each user in users
+          li #{user.name} née le #{new Date(user.birth).toLocaleDateString("fr-FR", {month: "short", day: "2-digit", year: "numeric"})}
+            div.buttons
+                a(href=`/delete/${user.name}`) X
+                a(href=`/user/${user.name}`) Modifier

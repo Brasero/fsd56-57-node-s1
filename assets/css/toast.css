@@ -1,0 +1,17 @@
+.error {
+ background: darkred;
+ border: 1px solid red;
+ color: #ffacac;
+ border-radius: 8px;
+ padding: 8px;
+ width: fit-content;
+}
+
+.success {
+ background: darkgreen;
+ border: 1px solid green;
+ color: lightgreen;
+ border-radius: 8px;
+ padding: 8px;
+ width: fit-content;
+}

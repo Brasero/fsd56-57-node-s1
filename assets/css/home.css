@@ -1,0 +1,26 @@
+form {
+ background: white;
+ display: flex;
+ flex-direction: column;
+ align-items: stretch;
+ justify-content: space-evenly;
+ box-shadow: 1px 1px 5px rgba(0,0,0,.3);
+ padding: 32px;
+ gap: 16px;
+ border-radius: 8px;
+
+ label {
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  align-items: center;
+ }
+
+ input[type="submit"] {
+  background: lightgreen;
+  color: whitesmoke;
+  border: none;
+  border-radius: 8px;
+  padding: 8px;
+ }
+}

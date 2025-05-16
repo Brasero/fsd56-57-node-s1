@@ -1,0 +1,14 @@
+extends ../layout/layout
+
+mixin formItem(label, name, type, value)
+    label #{label}
+        input&attributes(attributes)(name=name type=type placeholder=label value=value)
+
+block stylesheet
+    link(rel="stylesheet" href="/styles/home.css")
+
+block content
+    form(method=`POST` action=`${formAction ? formAction : "/"}`)
+        +formItem('Nom', 'name', "text", user ? user.name : "")
+        +formItem("Date", "birth", "date", user ? user.birth : "")
+        input(type="submit" value=`${formAction ? "Modifier" : "Ajouter"}`)
