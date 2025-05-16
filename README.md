@@ -25,7 +25,7 @@ const students = [
 Respectez la structure suivante
 
 ```text
-Data/ <-- Pour la question facultative
+Data/ 
 view/
     home.pug <-- formulaire
     ...
